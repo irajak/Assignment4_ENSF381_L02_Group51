@@ -1,16 +1,17 @@
+import './App.css';
 import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import Homepage from './Homepage';
-import ProductPage from './ProductPage';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Homepage from './components/Homepage';
+import ProductPage from './components/Productpage';
 
 const App = () => {
   return (
-    <Router>
-      <Switch>
-        <Route path="/products" component={ProductPage} />
-        <Route path="/" component={Homepage} />
-      </Switch>
-    </Router>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Homepage />} />
+        <Route path="/products" element={<ProductPage />} />
+      </Routes>
+    </BrowserRouter>
   );
 };
 

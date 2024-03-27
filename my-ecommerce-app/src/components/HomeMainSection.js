@@ -33,6 +33,4 @@ function HomeMainSection() {
  
 }
 
-
-
 export default HomeMainSection;

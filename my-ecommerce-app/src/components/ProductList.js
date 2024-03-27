@@ -1,6 +1,6 @@
 import React from 'react';
 import ProductItem from './ProductItem';
-import products from '../data/products'; // Assuming the correct path is used
+import products from '../data/products'; // Adjust the path as needed
 
 const ProductList = ({ addToCart }) => {
   return (

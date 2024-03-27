@@ -1,38 +1,54 @@
-import React, { useState } from 'react';
-import Header from './Header'; // Assuming the correct path is used
+import React, { useState, useEffect } from 'react';
+import Header from './Header'; // Adjust the path as needed
 import ProductList from './ProductList';
 import Cart from './Cart';
-import Footer from './Footer'; // Assuming the correct path is used
+import Footer from './Footer'; // Adjust the path as needed
+import products from '../data/products'; // Adjust the path as needed
 
-const ProductPage = () => {
-  const [cartItems, setCartItems] = useState([]);
+const Productpage = () => {
+  // Load cart items from local storage
+  const [cartItems, setCartItems] = useState(JSON.parse(localStorage.getItem('cartItems')) || []);
+
+  useEffect(() => {
+    // Save cart items to local storage when cartItems changes
+    localStorage.setItem('cartItems', JSON.stringify(cartItems));
+  }, [cartItems]);
 
   const addToCart = (product) => {
     const exists = cartItems.find(item => item.id === product.id);
     if (exists) {
-      setCartItems(cartItems.map(item => item.id === product.id ? { ...exists, quantity: exists.quantity + 1 } : item));
+      // If product exists, increase the quantity
+      setCartItems(cartItems.map(item => item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item));
     } else {
+      // If product does not exist, add to cart with quantity 1
       setCartItems([...cartItems, { ...product, quantity: 1 }]);
     }
   };
 
   const removeFromCart = (product) => {
     const exists = cartItems.find(item => item.id === product.id);
-    if (exists.quantity === 1) {
+    if (exists && exists.quantity === 1) {
+      // If only one item left, remove it from the cart
       setCartItems(cartItems.filter(item => item.id !== product.id));
-    } else {
-      setCartItems(cartItems.map(item => item.id === product.id ? { ...exists, quantity: exists.quantity - 1 } : item));
+    } else if (exists) {
+      // If more than one item, reduce the quantity
+      setCartItems(cartItems.map(item => item.id === product.id ? { ...item, quantity: item.quantity - 1 } : item));
     }
   };
 
   return (
-    <div>
+    <div className="product-page">
       <Header />
-      <ProductList addToCart={addToCart} />
-      <Cart cartItems={cartItems} removeFromCart={removeFromCart} />
+      <table>
+        <tr>
+          <td><ProductList products={products} addToCart={addToCart} /></td>
+          <td style={{ verticalAlign: 'top' }}><Cart cartItems={cartItems} removeFromCart={removeFromCart} /></td>
+        </tr>
+      </table>
       <Footer />
     </div>
   );
 };
 
-export default ProductPage;
+export default Productpage;
+
